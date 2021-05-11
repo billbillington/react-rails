@@ -27,7 +27,7 @@ module React
       # Render a UJS-type HTML tag annotated with data attributes, which
       # are used by react_ujs to actually instantiate the React component
       # on the client.
-      def react_component(name, props = {}, options = {}, &block)
+      def react_component(name:, schema:, props: {}, options: {}, &block)
         options = { :tag => options } if options.is_a?(Symbol)
         if options.fetch(:camelize_props, camelize_props_switch)
           props = React.camelize_props(props)
