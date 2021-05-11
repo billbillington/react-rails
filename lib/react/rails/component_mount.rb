@@ -54,7 +54,9 @@ module React
         # remove internally used properties so they aren't rendered to DOM
         html_options.except!(:tag, :prerender, :camelize_props)
 
-        json_checker.call(json: html_options)
+        json_checker.call(
+          json_string: html_options.fetch(:json).fetch(:data).fetch(:react_props)
+        )
 
         rendered_tag = content_tag(html_tag, '', html_options, &block)
         if React::ServerRendering.renderer_options[:replay_console]
