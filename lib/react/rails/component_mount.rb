@@ -27,7 +27,7 @@ module React
       # Render a UJS-type HTML tag annotated with data attributes, which
       # are used by react_ujs to actually instantiate the React component
       # on the client.
-      def react_component(name:, props: {}, options: {}, &block)
+      def react_component(name:, json_checker:, props: {}, options: {}, &block)
         options = { :tag => options } if options.is_a?(Symbol)
         if options.fetch(:camelize_props, camelize_props_switch)
           props = React.camelize_props(props)
@@ -53,6 +53,10 @@ module React
 
         # remove internally used properties so they aren't rendered to DOM
         html_options.except!(:tag, :prerender, :camelize_props)
+
+        json_checker.call(
+          json_string: html_options.fetch(:data).fetch(:react_props)
+        )
 
         rendered_tag = content_tag(html_tag, '', html_options, &block)
         if React::ServerRendering.renderer_options[:replay_console]
